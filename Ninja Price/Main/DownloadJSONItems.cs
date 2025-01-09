@@ -4,7 +4,7 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using ExileCore.Shared.Nodes;
+using ExileCore2.Shared.Nodes;
 
 namespace Ninja_Price.Main;
 

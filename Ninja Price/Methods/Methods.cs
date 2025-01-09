@@ -1,14 +1,14 @@
-using ExileCore.PoEMemory.Components;
-using ExileCore.PoEMemory.Elements;
-using ExileCore.PoEMemory.Elements.InventoryElements;
-using ExileCore.Shared.Enums;
+using ExileCore2.PoEMemory.Components;
+using ExileCore2.PoEMemory.Elements;
+using ExileCore2.PoEMemory.Elements.InventoryElements;
+using ExileCore2.Shared.Enums;
 using Ninja_Price.API.PoeNinja;
 using Ninja_Price.Enums;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
-using ExileCore.Shared.Nodes;
-using Color = SharpDX.Color;
+using ExileCore2.Shared.Nodes;
 
 namespace Ninja_Price.Main;
 
@@ -344,13 +344,7 @@ public partial class Main
                         var allLinksLines = CollectedData.UniqueArmours.Lines.Where(x =>
                             (x.Name == item.UniqueName || item.UniqueNameCandidates.Contains(x.Name)) &&
                             !x.DetailsId.Contains("-relic"));
-                        var uniqueArmourSearchLinks = item.LargestLink switch
-                        {
-                            < 5 => allLinksLines.Where(x => x.Links != 5 && x.Links != 6).ToList(),
-                            5 => allLinksLines.Where(x => x.Links == 5).ToList(),
-                            6 => allLinksLines.Where(x => x.Links == 6).ToList(),
-                            _ => new List<UniqueArmours.Line>()
-                        };
+                        var uniqueArmourSearchLinks = allLinksLines.ToList();
 
                         if (uniqueArmourSearchLinks.Count == 1)
                         {
@@ -470,13 +464,7 @@ public partial class Main
                         var allLinksLines = CollectedData.UniqueWeapons.Lines.Where(x =>
                             (x.Name == item.UniqueName || item.UniqueNameCandidates.Contains(x.Name)) &&
                             !x.DetailsId.Contains("-relic"));
-                        var uniqueArmourSearchLinks = item.LargestLink switch
-                        {
-                            < 5 => allLinksLines.Where(x => x.Links != 5 && x.Links != 6).ToList(),
-                            5 => allLinksLines.Where(x => x.Links == 5).ToList(),
-                            6 => allLinksLines.Where(x => x.Links == 6).ToList(),
-                            _ => new List<UniqueWeapons.Line>()
-                        };
+                        var uniqueArmourSearchLinks = allLinksLines.ToList();
                         if (uniqueArmourSearchLinks.Count == 1)
                         {
                             item.PriceData.MinChaosValue = uniqueArmourSearchLinks[0].ChaosValue ?? 0;

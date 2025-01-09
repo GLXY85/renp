@@ -1,15 +1,15 @@
-using ExileCore.PoEMemory;
-using ExileCore.PoEMemory.Components;
-using ExileCore.PoEMemory.Elements.InventoryElements;
-using ExileCore.PoEMemory.FilesInMemory;
-using ExileCore.PoEMemory.MemoryObjects;
-using ExileCore.Shared.Enums;
+using ExileCore2.PoEMemory;
+using ExileCore2.PoEMemory.Components;
+using ExileCore2.PoEMemory.Elements.InventoryElements;
+using ExileCore2.PoEMemory.FilesInMemory;
+using ExileCore2.PoEMemory.MemoryObjects;
+using ExileCore2.Shared.Enums;
 using Ninja_Price.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ExileCore.PoEMemory.Models;
-using ExileCore.Shared.Nodes;
+using ExileCore2.PoEMemory.Models;
+using ExileCore2.Shared.Nodes;
 
 namespace Ninja_Price.Main;
 
@@ -27,14 +27,12 @@ public class CustomItem
     public readonly bool IsElder;
     public readonly bool IsIdentified;
     public readonly bool IsCorrupted;
-    public readonly bool IsRgb;
     public readonly bool IsShaper;
     public readonly bool IsWeapon;
     public readonly bool IsHovered;
     public Element Element;
     public readonly Entity Entity;
     public int ItemLevel;
-    public readonly int LargestLink = 0;
     public readonly string Path;
     public readonly int Quality;
     public readonly int GemLevel;
@@ -164,9 +162,7 @@ public class CustomItem
             {
                 try
                 {
-                    IsRgb = sockets.IsRGB;
                     Sockets = sockets.NumberOfSockets;
-                    LargestLink = sockets.LargestLinkSize;
                 }
                 catch
                 {

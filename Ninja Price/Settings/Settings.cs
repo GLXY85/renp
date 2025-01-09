@@ -1,10 +1,10 @@
 using System;
+using System.Drawing;
 using System.Windows.Forms;
-using ExileCore.Shared.Attributes;
-using ExileCore.Shared.Interfaces;
-using ExileCore.Shared.Nodes;
+using ExileCore2.Shared.Attributes;
+using ExileCore2.Shared.Interfaces;
+using ExileCore2.Shared.Nodes;
 using Newtonsoft.Json;
-using SharpDX;
 
 namespace Ninja_Price.Settings;
 
@@ -62,12 +62,8 @@ public class DataSourceSettings
 [Submenu(CollapsedByDefault = true)]
 public class LeagueSpecificSettings
 {
-    public ToggleNode ShowCoffinPrices { get; set; } = new(true);
     public ToggleNode ShowRitualWindowPrices { get; set; } = new(true);
-    public ToggleNode ShowVillageRewardWindowPrices { get; set; } = new(true);
     public ToggleNode ShowPurchaseWindowPrices { get; set; } = new(true);
-    public ToggleNode ShowSanctumRewardPrices { get; set; } = new(true);
-    public ToggleNode ShowVillageUniqueDisenchantValueWindow { get; set; } = new(false);
 
     public ToggleNode ShowExpeditionVendorOverlay { get; set; } = new(false);
 
@@ -126,8 +122,8 @@ public class UniqueIdentificationSettings
     public ToggleNode ShowWarningTextForUnknownUniques { get; set; } = new(true);
     public RangeNode<float> UniqueLabelSize { get; set; } = new(0.8f, 0.1f, 1);
     public ColorNode UniqueItemNameTextColor { get; set; } = new(Color.Black);
-    public ColorNode UniqueItemNameBackgroundColor { get; set; } = new(new Color(175, 96, 37));
-    public ColorNode ValuableUniqueItemNameTextColor { get; set; } = new(new Color(175, 96, 37));
+    public ColorNode UniqueItemNameBackgroundColor { get; set; } = new(Color.FromArgb(175, 96, 37));
+    public ColorNode ValuableUniqueItemNameTextColor { get; set; } = new(Color.FromArgb(175, 96, 37));
     public ColorNode ValuableUniqueItemNameBackgroundColor { get; set; } = new(Color.White);
 }
 
@@ -162,8 +158,8 @@ public class PriceOverlaySettings
 public class VisualPriceSettings
 {
     public RangeNode<int> SignificantDigits { get; set; } = new(2, 0, 2);
-    public ColorNode FontColor { get; set; } = new Color(216, 216, 216, 255);
-    public ColorNode BackgroundColor { get; set; } = new Color(0, 0, 0, 255);
+    public ColorNode FontColor { get; set; } = Color.FromArgb(216, 216, 216);
+    public ColorNode BackgroundColor { get; set; } = Color.FromArgb(0, 0, 0);
     public RangeNode<int> ValuableColorThreshold { get; set; } = new(50, 0, 100000);
     public ColorNode ValuableColor { get; set; } = new(Color.Violet);
 

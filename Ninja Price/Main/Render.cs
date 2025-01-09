@@ -1,31 +1,31 @@
-using ExileCore.PoEMemory;
-using ExileCore.PoEMemory.Components;
-using ExileCore.PoEMemory.Elements;
-using ExileCore.PoEMemory.Elements.InventoryElements;
-using ExileCore.Shared.Cache;
-using ExileCore.Shared.Enums;
-using ExileCore.Shared.Helpers;
+using ExileCore2.PoEMemory;
+using ExileCore2.PoEMemory.Components;
+using ExileCore2.PoEMemory.Elements;
+using ExileCore2.PoEMemory.Elements.InventoryElements;
+using ExileCore2.Shared.Cache;
+using ExileCore2.Shared.Enums;
+using ExileCore2.Shared.Helpers;
 using ImGuiNET;
 using Ninja_Price.Enums;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Numerics;
 using System.Text.RegularExpressions;
-using ExileCore.PoEMemory.FilesInMemory;
+using ExileCore2.PoEMemory.FilesInMemory;
 using static Ninja_Price.Enums.HaggleTypes.HaggleType;
-using Color = SharpDX.Color;
-using RectangleF = SharpDX.RectangleF;
+using RectangleF = ExileCore2.Shared.RectangleF;
 
 namespace Ninja_Price.Main;
 
 public partial class Main
 {
-    public Stopwatch StashUpdateTimer = Stopwatch.StartNew();
-    public Stopwatch InventoryUpdateTimer = Stopwatch.StartNew();
+    public readonly Stopwatch StashUpdateTimer = Stopwatch.StartNew();
+    public readonly Stopwatch InventoryUpdateTimer = Stopwatch.StartNew();
     public double StashTabValue { get; set; }
     public double InventoryTabValue { get; set; }
     public double? DivineDalue { get; set; }
@@ -50,11 +50,6 @@ public partial class Main
     {
         _slowGroundItems = new TimeCache<List<ItemOnGround>>(GetItemsOnGroundSlow, 500);
         _groundItems = new FrameCache<List<ItemOnGround>>(CacheUtils.RememberLastValue(GetItemsOnGround, new List<ItemOnGround>()));
-        _disenchantCache = new TimeCache<List<VillageUniqueDisenchantValue>>(() =>
-        {
-            GameController.Files.VillageUniqueDisenchantValues.ReloadIfEmpty();
-            return GameController.Files.VillageUniqueDisenchantValues.EntriesList;
-        }, 1000);
     }
 
     private List<ItemOnGround> GetItemsOnGround(List<ItemOnGround> previousValue)
@@ -160,11 +155,6 @@ public partial class Main
                     {
                         ItemList = ritualItems;
                     }
-                    else if (Settings.LeagueSpecificSettings.ShowVillageRewardWindowPrices &&
-                             GameController.Game.IngameState.IngameUi.VillageRewardWindow is { IsVisible: true, Items: { Count: > 0 } villageItems })
-                    {
-                        ItemList = villageItems;
-                    }
                     else if (Settings.LeagueSpecificSettings.ShowPurchaseWindowPrices &&
                              GameController.Game.IngameState.IngameUi.PurchaseWindow?.TabContainer?.VisibleStash is { IsVisible: true, VisibleInventoryItems: { Count: > 0 } purchaseWindowItems })
                     {
@@ -244,9 +234,6 @@ public partial class Main
         ProcessExpeditionWindow();
         ProcessItemsOnGround();
         ProcessTradeWindow();
-        ProcessDivineFontRewards();
-        DrawVillageUniqueWindow();
-        ShowSanctumOfferPrices();
         ProcessHoveredItem();
         VisibleInventoryValue();
 
@@ -277,7 +264,6 @@ public partial class Main
             }
         }
         else if (Settings.LeagueSpecificSettings.ShowRitualWindowPrices && GameController.IngameState.IngameUi.RitualWindow.IsVisible ||
-                 Settings.LeagueSpecificSettings.ShowVillageRewardWindowPrices && GameController.IngameState.IngameUi.VillageRewardWindow.IsVisible ||
                  Settings.LeagueSpecificSettings.ShowPurchaseWindowPrices && (GameController.IngameState.IngameUi.PurchaseWindow.IsVisible ||
                                                                               GameController.IngameState.IngameUi.PurchaseWindowHideout.IsVisible))
         {
@@ -289,7 +275,7 @@ public partial class Main
                     if (customItem.ItemType == ItemTypes.None) continue;
                     var text = customItem.PriceData.MinChaosValue.FormatNumber(Settings.VisualPriceSettings.SignificantDigits.Value);
                     var textSize = Graphics.MeasureText(text);
-                    var topRight = customItem.Element.GetClientRectCache.TopRight.ToVector2Num();
+                    var topRight = customItem.Element.GetClientRectCache.TopRight;
                     var rect = new RectangleF(topRight.X - textSize.X, topRight.Y, textSize.X, textSize.Y);
                     if (rect.Intersects(HoveredItem?.Element?.Tooltip?.GetClientRectCache ?? default))
                     {
@@ -362,8 +348,8 @@ public partial class Main
                 if (HoveredItem.UniqueNameCandidates.Any())
                 {
                     AddText(HoveredItem.UniqueNameCandidates.Count == 1
-                        ? $"\nIdentified as: {HoveredItem.UniqueNameCandidates.First()} (disenchants for {_disenchantCache.Value.FirstOrDefault(y => y.UniqueName?.Text == HoveredItem.UniqueNameCandidates.First())?.Value * 2000})"
-                        : $"\nIdentified as one of:\n{string.Join('\n', HoveredItem.UniqueNameCandidates.Select(x => $"{x} (disenchants for {_disenchantCache.Value.FirstOrDefault(y => y.UniqueName?.Text == x)?.Value * 2000})"))}");
+                        ? $"\nIdentified as: {HoveredItem.UniqueNameCandidates.First()}"
+                        : $"\nIdentified as one of:\n{string.Join('\n', HoveredItem.UniqueNameCandidates.Select(x => $"{x}"))}");
                 }
 
                 AddSection();
@@ -379,11 +365,6 @@ public partial class Main
                 AddText(minPriceText != maxPriceText 
                     ? $"\nChaos: {minPriceText}c - {maxPriceText}c" 
                     : $"\nChaos: {minPriceText}c");
-
-                if (!string.IsNullOrEmpty(HoveredItem.UniqueName))
-                {
-                    AddText($"\nDisenchants for {_disenchantCache.Value.FirstOrDefault(x => x.UniqueName?.Text == HoveredItem.UniqueName)?.Value * 2000}");
-                }
 
                 break;
             case ItemTypes.Map:
@@ -621,7 +602,7 @@ public partial class Main
 
                 if (customItem.PriceData.MinChaosValue > 0)
                 {
-                    Graphics.DrawText(customItem.PriceData.MinChaosValue.FormatNumber(2), box.TopRight.ToVector2Num(), Settings.VisualPriceSettings.FontColor, FontAlign.Right);
+                    Graphics.DrawText(customItem.PriceData.MinChaosValue.FormatNumber(2), box.TopRight, Settings.VisualPriceSettings.FontColor, FontAlign.Right);
                 }
 
                 if (Settings.LeagueSpecificSettings.ShowArtifactChaosPrices && TryGetArtifactPrice(customItem, out var amount, out var artifactName))
@@ -631,7 +612,7 @@ public partial class Main
                                    ? (customItem.PriceData.MinChaosValue / amount * 100).FormatNumber(2)
                                    : "");
                     var textSize = Graphics.MeasureText(text);
-                    var leftTop = box.BottomLeft.ToVector2Num() - new Vector2(0, textSize.Y);
+                    var leftTop = box.BottomLeft - new Vector2(0, textSize.Y);
                     Graphics.DrawTextWithBackground(text, leftTop, Settings.VisualPriceSettings.FontColor, Color.Black);
                 }
             }
@@ -674,178 +655,6 @@ public partial class Main
         DrawWorthWidget("Yours\n", true, yourTradeWindowValue, textPosition, 2, Settings.VisualPriceSettings.FontColor, true, new List<CustomItem>());
     }
 
-    private void ProcessDivineFontRewards()
-    {
-        if ((!Settings.PriceOverlaySettings.DoNotDrawWhileAnItemIsHovered || HoveredItem == null) &&
-            GameController.IngameState.IngameUi.LabyrinthDivineFontPanel is { IsVisible: true, GemElements: { Count: > 0 } options })
-        {
-            foreach (var x in options.Where(x => x.IsVisible))
-            {
-                try
-                {
-                    var customItem = new CustomItem(x[0].Entity, x);
-                    GetValue(customItem);
-                    PriceBoxOverItem(customItem, null, Color.White);
-                }
-                catch (Exception ex)
-                {
-                    LogError(ex.ToString());
-                }
-            }
-        }
-    }
-
-    private string _disenchantFilter = "";
-    private float _minDisenchantValue = 0;
-    private float _maxDisenchantCost = 1000;
-    private readonly CachedValue<List<VillageUniqueDisenchantValue>> _disenchantCache;
-
-    private void DrawVillageUniqueWindow()
-    {
-        if (Settings.LeagueSpecificSettings.ShowVillageUniqueDisenchantValueWindow)
-        {
-            var show = true;
-            if (ImGui.Begin("Unique disenchant values", ref show))
-            {
-                ImGui.SliderFloat("Minimum disenchant value", ref _minDisenchantValue, 0, 1000000);
-                ImGui.SliderFloat("Maximum disenchant cost", ref _maxDisenchantCost, 0, 100000);
-                ImGui.InputTextWithHint("##filter", "Filter", ref _disenchantFilter, 200);
-                if (ImGui.BeginTable("Unique disenchant values", 4, ImGuiTableFlags.Borders | ImGuiTableFlags.Sortable | ImGuiTableFlags.SizingFixedFit))
-                {
-                    ImGui.TableSetupColumn("Name (click to search on trade)");
-                    ImGui.TableSetupColumn("Price");
-                    ImGui.TableSetupColumn("Dust");
-                    ImGui.TableSetupColumn("Dust/chaos", ImGuiTableColumnFlags.DefaultSort | ImGuiTableColumnFlags.PreferSortDescending);
-                    ImGui.TableHeadersRow();
-                    var uniquePrices = CollectedData.UniqueArmours.Lines.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.Min(y => y.ChaosValue ?? 0))
-                        .Concat(CollectedData.UniqueWeapons.Lines.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.Min(y => y.ChaosValue ?? 0)))
-                        .Concat(CollectedData.UniqueAccessories.Lines.GroupBy(x => x.Name).ToDictionary(x => x.Key, x => x.Min(y => y.ChaosValue ?? 0)))
-                        .ToDictionary(x => x.Key.Replace('\x2019', '\x27'), x => x.Value);
-                    var excludedUniques = CollectedData.UniqueFlasks.Lines.Select(x => x.Name)
-                        .Concat(CollectedData.UniqueMaps.Lines.Select(x => x.Name))
-                        .Concat(CollectedData.UniqueJewels.Lines.Select(x => x.Name))
-                        .Select(x => x.Replace('\x2019', '\x27'))
-                        .ToHashSet();
-
-                    var unfilteredItems = _disenchantCache.Value.ExceptBy(excludedUniques, x => x.UniqueName?.Text.Replace('\x2019', '\x27') ?? "")
-                        .Select(x => (
-                            Name: x.UniqueName?.Text.Replace('\x2019', '\x27') ?? "",
-                            Cost: uniquePrices.GetValueOrDefault(x.UniqueName?.Text ?? ""),
-                            Value: x.Value * 2000,
-                            ValuePerChaos: uniquePrices.TryGetValue(x.UniqueName?.Text.Replace('\x2019', '\x27') ?? "", out var price) ? x.Value * 2000 / Math.Max(1, price) : 0))
-                        .ToList();
-                    var items = unfilteredItems.Any()
-                        ? unfilteredItems
-                            .Where(x => string.IsNullOrEmpty(_disenchantFilter) || x.Name.Contains(_disenchantFilter, StringComparison.InvariantCultureIgnoreCase))
-                            .Where(x => x.Value >= _minDisenchantValue)
-                            .Where(x => x.Cost <= _maxDisenchantCost)
-                            .ToList()
-                        : [("No items in game's memory...\nYou may need to approach Rog and give him\na unique one for data to show up", 0, -1, 0)];
-                    var sortSpecs = ImGui.TableGetSortSpecs();
-                    if (sortSpecs.SpecsCount > 0)
-                    {
-                        object SortSelector((string Name, double Cost, float Value, double ValuePerChaos) x) =>
-                            sortSpecs.Specs.ColumnIndex switch
-                            {
-                                0 => x.Name,
-                                1 => x.Cost,
-                                2 => x.Value,
-                                3 => x.ValuePerChaos,
-                                _ => 0,
-                            };
-
-                        if (sortSpecs.Specs.SortDirection == ImGuiSortDirection.Ascending)
-                        {
-                            items = items.OrderBy(SortSelector).ToList();
-                        }
-                        else if (sortSpecs.Specs.SortDirection == ImGuiSortDirection.Descending)
-                        {
-                            items = items.OrderByDescending(SortSelector).ToList();
-                        }
-                    }
-
-                    foreach (var item in items)
-                    {
-                        ImGui.TableNextRow();
-                        ImGui.TableNextColumn();
-                        if (item.Value == -1)
-                        {
-                            ImGui.TextUnformatted(item.Name);
-                        }
-                        else if (ImGui.Selectable(item.Name))
-                        {
-                            var query = $$$"""{"query":{"status":{"option":"online"},"term":"{{{item.Name}}}","stats":[{"type":"and","filters":[]}]},"sort":{"price":"asc"}}""";
-                            Process.Start(new ProcessStartInfo(
-                                $"https://www.pathofexile.com/trade/search/{Settings.DataSourceSettings.League.Value}?q={WebUtility.UrlEncode(query)}")
-                            {
-                                UseShellExecute = true
-                            });
-                        }
-
-                        ImGui.TableNextColumn();
-                        ImGui.TextUnformatted($"{item.Cost:0.##}");
-                        ImGui.TableNextColumn();
-                        ImGui.TextUnformatted($"{item.Value:F0}");
-                        ImGui.TableNextColumn();
-                        ImGui.TextUnformatted($"{item.ValuePerChaos:F0}");
-                    }
-
-                    ImGui.EndTable();
-                }
-
-                ImGui.End();
-            }
-
-            Settings.LeagueSpecificSettings.ShowVillageUniqueDisenchantValueWindow.Value = show;
-        }
-    }
-
-    private static readonly Regex SanctumOfferParse = new(
-        @"(Receive)\s((?'currencysize'(\d+))x(?'currencyname'.*))\s(right now|at the end of the next Floor|at the end of the Floor|on completing the Sanctum)$",
-        RegexOptions.Compiled);
-
-    private void ShowSanctumOfferPrices()
-    {
-        if (!Settings.LeagueSpecificSettings.ShowSanctumRewardPrices ||
-            GameController.IngameState.IngameUi.SanctumRewardWindow is not
-            {
-                IsVisible: true,
-                RewardElements: { Count: > 0 } rewardElements
-            })
-            return;
-
-        foreach (var offer in rewardElements)
-        {
-            var offerText = offer.Children[1].Text;
-            if (offerText == null) continue;
-            var match = SanctumOfferParse.Match(offerText);
-            if (!match.Success)
-            {
-                continue;
-            }
-
-            var currencyName = match.Groups["currencyname"].Value.Trim().Replace("Orbs", "Orb").TrimEnd('s');
-            var stackSizeText = match.Groups["currencysize"].ValueSpan.Trim();
-            if (!int.TryParse(stackSizeText, out var stackSize))
-                continue;
-            var data = new CustomItem
-            {
-                CurrencyInfo = new CustomItem.CurrencyData
-                {
-                    IsShard = false,
-                    StackSize = stackSize
-                },
-                BaseName = currencyName,
-                ItemType = ItemTypes.Currency,
-                Element = offer.GetChildFromIndices(0, 0),
-            };
-            GetValue(data);
-            PriceBoxOverItem(data, null, data.PriceData.MinChaosValue >= Settings.VisualPriceSettings.ValuableColorThreshold
-                ? Settings.VisualPriceSettings.ValuableColor
-                : Settings.VisualPriceSettings.FontColor);
-        }
-    }
-
     private void ProcessItemsOnGround()
     {
         if (!Settings.GroundItemSettings.PriceItemsOnGround && !Settings.UniqueIdentificationSettings.ShowRealUniqueNameOnGround && !Settings.GroundItemSettings.PriceHeistRewards) return;
@@ -867,7 +676,6 @@ public partial class Main
             switch (processingType)
             {
                 case GroundItemProcessingType.WorldItem:
-                case GroundItemProcessingType.CollectableCorpse when Settings.LeagueSpecificSettings.ShowCoffinPrices:
                 {
                     if (!tooltipRect.Intersects(box) && !leftPanelRect.Intersects(box) && !rightPanelRect.Intersects(box))
                     {
@@ -875,8 +683,7 @@ public partial class Main
 
                         if (Settings.GroundItemSettings.PriceItemsOnGround &&
                             (!Settings.GroundItemSettings.OnlyPriceUniquesOnGround || 
-                             item.Rarity == ItemRarity.Unique ||
-                             processingType == GroundItemProcessingType.CollectableCorpse))
+                             item.Rarity == ItemRarity.Unique))
                         {
                             if (item.PriceData.MinChaosValue > 0)
                             {
@@ -908,7 +715,7 @@ public partial class Main
                             {
                                 ImGui.SetWindowFontScale(scale);
                                 var newTextSize = ImGui.CalcTextSize(text);
-                                var textPosition = box.Center.ToVector2Num() - newTextSize / 2;
+                                var textPosition = box.Center - newTextSize / 2;
                                 var rectPosition = new Vector2(textPosition.X, box.Top + 1);
                                 drawList.AddRectFilled(rectPosition, rectPosition + new Vector2(newTextSize.X, box.Height - 2), backgroundColor.ToImgui());
                                 drawList.AddText(textPosition, textColor.ToImgui(), text);

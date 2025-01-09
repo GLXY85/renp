@@ -1,6 +1,6 @@
-﻿using ExileCore;
-using ExileCore.PoEMemory.FilesInMemory;
-using ExileCore.PoEMemory.MemoryObjects;
+﻿using ExileCore2;
+using ExileCore2.PoEMemory.FilesInMemory;
+using ExileCore2.PoEMemory.MemoryObjects;
 using Newtonsoft.Json;
 using Ninja_Price.API.PoeNinja;
 using System;
@@ -10,8 +10,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using ExileCore.PoEMemory.Models;
-using ExileCore.Shared.Nodes;
+using ExileCore2.PoEMemory.Models;
+using ExileCore2.Shared.Nodes;
 
 namespace Ninja_Price.Main;
 
