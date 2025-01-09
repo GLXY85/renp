@@ -1,27 +1,16 @@
-# Get-Chaos-Value
-ExileAPI Plugin for instant price data comparison.
-
-https://www.ownedcore.com/forums/mmo/path-of-exile/poe-bots-programs/635847-poehud-plugin-ninja-pricer.html
+# NinjaPricer
+ExileCore2 Plugin for instant price checking
 
 What does it do?
-This plugin download poe.ninja API as a local structured data file onto your PC.
-The plugin can then use this data to compare with the data from ExileAPI and your client to give the user instant price check on item such as:
+This plugin downloads public price data.
+The data can then be used to price check items such as:
 - Currency
-- Divination Card
-- Essence
-- Fragment
-- Incubator
-- Oil
-- Prophecy
-- Resonator
-- Fossil
-- Scarab
-- Vial
-- Delirium Orb
-- Map
-- Unique
+- Divination Cards
+- Essences
+- Fragments
+- Uniques
 
 The plugin can also show the overall worth of a stash tab or inventory.
 
-Item that aren't available on poe.ninja show 0c as price.
-Item that have multiple variant (ex: Vessel of Vinktar) show a range between the lowest and highest cost. The plugin can't differentiate between them.
+Item that aren't available in the data show 0c as price.
+Item that have multiple variants show a range between the lowest and highest cost. The plugin can't differentiate between them.
