@@ -1,5 +1,5 @@
 # NinjaPricer
-ExileCore2 Plugin for instant price checking
+ExileCore2 Plugin for instant price checking. Originally made by https://github.com/DetectiveSquirrel/
 
 What does it do?
 This plugin downloads public price data.
