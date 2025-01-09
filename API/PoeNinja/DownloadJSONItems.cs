@@ -98,8 +98,8 @@ public partial class NinjaPricer
                 await File.WriteAllTextAsync(metadataPath, JsonConvert.SerializeObject(new LeagueMetadata { LastLoadTime = DateTime.UtcNow }));
 
                 LogMessage("Finished Gathering Data from Poe.Ninja.", 5);
-                CollectedData = newData;
-                DivineDalue = CollectedData.Currency.Lines.Find(x => x.CurrencyTypeName == "Divine Orb")?.ChaosEquivalent;
+                //CollectedData = newData;
+                //DivineDalue = CollectedData.Currency.Find(x => x.type == "Divine Orb")?.latest_price.price;
                 LogMessage("Updated CollectedData.", 5);
             }
             finally

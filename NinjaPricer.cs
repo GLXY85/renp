@@ -3,36 +3,37 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using ExileCore2;
 using ExileCore2.PoEMemory.MemoryObjects;
 using ExileCore2.PoEMemory.Models;
 using Newtonsoft.Json;
-using NinjaPricer.API.PoeNinja;
+using NinjaPricer.API.Poe2Scout;
+using CollectiveApiData = NinjaPricer.API.Poe2Scout.CollectiveApiData;
 
 namespace NinjaPricer;
 
 public partial class NinjaPricer : BaseSettingsPlugin<NinjaPricerSettings>
 {
     private string NinjaDirectory;
-    private CollectiveApiData CollectedData;
+    private CollectiveApiData CollectedData => _downloader.CollectedData;
     private const string CustomUniqueArtMappingPath = "uniqueArtMapping.json";
     private const string DefaultUniqueArtMappingPath = "uniqueArtMapping.default.json";
     private int _updating;
     public Dictionary<string, List<string>> UniqueArtMapping = new Dictionary<string, List<string>>();
-
-    [GeneratedRegex("<[^>]*>{{(?<data>[^}]*)}}")]
-    private static partial Regex StripTagsRegex();
+    private readonly DataDownloader _downloader = new DataDownloader();
 
     public override bool Initialise()
     {
+        _downloader.DataDirectory = Path.Join(DirectoryFullName, "poescoutdata");
+        _downloader.Settings = Settings;
+        _downloader.log = LogMessage;
         NinjaDirectory = Path.Join(DirectoryFullName, "NinjaData");
         Directory.CreateDirectory(NinjaDirectory);
 
         UpdateLeagueList();
-        StartDataReload(Settings.DataSourceSettings.League.Value, false);
+        _downloader.StartDataReload(Settings.DataSourceSettings.League.Value, false);
 
-        Settings.DataSourceSettings.ReloadPrices.OnPressed += () => StartDataReload(Settings.DataSourceSettings.League.Value, true);
+        Settings.DataSourceSettings.ReloadPrices.OnPressed += () => _downloader.StartDataReload(Settings.DataSourceSettings.League.Value, true);
         Settings.UniqueIdentificationSettings.RebuildUniqueItemArtMappingBackup.OnPressed += () =>
         {
             var mapping = GetGameFileUniqueArtMapping();
@@ -88,7 +89,7 @@ public partial class NinjaPricer : BaseSettingsPlugin<NinjaPricerSettings>
                 if (Settings.DataSourceSettings.League.Value != playerLeague)
                 {
                     Settings.DataSourceSettings.League.Value = playerLeague;
-                    StartDataReload(Settings.DataSourceSettings.League.Value, false);
+                    _downloader.StartDataReload(Settings.DataSourceSettings.League.Value, false);
                 }
             }
         }
@@ -176,16 +177,16 @@ public partial class NinjaPricer : BaseSettingsPlugin<NinjaPricerSettings>
             leagueList.Add(playerLeague);
         }
 
-        try
-        {
-            var leagueListFromUrl = Utils.DownloadFromUrl("https://poe.ninja/api/data/getindexstate").Result;
-            var leagueData = JsonConvert.DeserializeObject<NinjaLeagueListRootObject>(leagueListFromUrl);
-            leagueList.UnionWith(leagueData.economyLeagues.Where(league => league.indexed).Select(league => league.name));
-        }
-        catch (Exception ex)
-        {
-            LogError($"Failed to download the league list: {ex}");
-        }
+        //try
+        //{
+        //    var leagueListFromUrl = Utils.DownloadFromUrl("https://poe.ninja/api/data/getindexstate").Result;
+        //    var leagueData = JsonConvert.DeserializeObject<NinjaLeagueListRootObject>(leagueListFromUrl);
+        //    leagueList.UnionWith(leagueData.economyLeagues.Where(league => league.indexed).Select(league => league.name));
+        //}
+        //catch (Exception ex)
+        //{
+        //    LogError($"Failed to download the league list: {ex}");
+        //}
 
         leagueList.Add("Standard");
         leagueList.Add("Hardcore");

@@ -30,9 +30,8 @@ public static class Extensions
         return Math.Round((decimal)number, significantDigits).ToString($"#,##0.{new string(forceDecimals ? '0' : '#', significantDigits)}");
     }
 
-    public static bool IsChanceable(this INameAndDetailsId item)
+    public static bool IsChanceable(this object item)
     {
-        return !item.Name.StartsWith("Replica ", StringComparison.Ordinal) &&
-               !item.DetailsId.EndsWith("-relic", StringComparison.Ordinal);
+        return true;
     }
 }

@@ -25,7 +25,6 @@ public partial class NinjaPricer
     public readonly Stopwatch InventoryUpdateTimer = Stopwatch.StartNew();
     public double StashTabValue { get; set; }
     public double InventoryTabValue { get; set; }
-    public double? DivineDalue { get; set; }
     public List<NormalInventoryItem> ItemList { get; set; } = new List<NormalInventoryItem>();
     public List<CustomItem> FormattedItemList { get; set; } = new List<CustomItem>();
 
@@ -129,7 +128,7 @@ public partial class NinjaPricer
             // only update if the time between last update is more than AutoReloadTimer interval
             if (Settings.DataSourceSettings.AutoReload && Settings.DataSourceSettings.LastUpdateTime.AddMinutes(Settings.DataSourceSettings.ReloadPeriod.Value) < DateTime.Now)
             {
-                StartDataReload(Settings.DataSourceSettings.League.Value, true);
+                _downloader.StartDataReload(Settings.DataSourceSettings.League.Value, true);
                 Settings.DataSourceSettings.LastUpdateTime = DateTime.Now;
             }
 
@@ -314,19 +313,11 @@ public partial class NinjaPricer
             case ItemTypes.Currency:
             case ItemTypes.Essence:
             case ItemTypes.Fragment:
-            case ItemTypes.Scarab:
-            case ItemTypes.Resonator:
-            case ItemTypes.Fossil:
-            case ItemTypes.Oil:
-            case ItemTypes.Artifact:
             case ItemTypes.Catalyst:
-            case ItemTypes.DeliriumOrbs:
-            case ItemTypes.Vials:
+            case ItemTypes.DistilledDelirium:
+            case ItemTypes.Artifact:
             case ItemTypes.DivinationCard:
-            case ItemTypes.Incubator:
-            case ItemTypes.Tattoo:
             case ItemTypes.Omen:
-            case ItemTypes.KalguuranRune:
                 if (priceInDivines >= 0.1)
                 {
                     var priceInDivinessPerOne = priceInDivines / HoveredItem.CurrencyInfo.StackSize;
@@ -334,13 +325,12 @@ public partial class NinjaPricer
                         ? $"\nDivine: {priceInDivinesText}d ({priceInDivinessPerOne.FormatNumber(2)}d per one)"
                         : $"\nDivine: {priceInDivinesText}d");
                 }
-                AddText($"\nChaos: {minPriceText}c ({(priceInChaos / HoveredItem.CurrencyInfo.StackSize).FormatNumber(2, Settings.VisualPriceSettings.MaximalValueForFractionalDisplay)}c per one)");
+                AddText($"\nChaos: {minPriceText}ex ({(priceInChaos / HoveredItem.CurrencyInfo.StackSize).FormatNumber(2, Settings.VisualPriceSettings.MaximalValueForFractionalDisplay)}ex per one)");
                 break;
             case ItemTypes.UniqueAccessory:
             case ItemTypes.UniqueArmour:
             case ItemTypes.UniqueFlask:
             case ItemTypes.UniqueJewel:
-            case ItemTypes.UniqueMap:
             case ItemTypes.UniqueWeapon:
                 if (HoveredItem.UniqueNameCandidates.Any())
                 {
@@ -360,22 +350,18 @@ public partial class NinjaPricer
 
                 var maxPriceText = HoveredItem.PriceData.MaxChaosValue.FormatNumber(2, Settings.VisualPriceSettings.MaximalValueForFractionalDisplay);
                 AddText(minPriceText != maxPriceText 
-                    ? $"\nChaos: {minPriceText}c - {maxPriceText}c" 
-                    : $"\nChaos: {minPriceText}c");
+                    ? $"\nExalt: {minPriceText}ex - {maxPriceText}ex" 
+                    : $"\nExalt: {minPriceText}ex");
 
                 break;
             case ItemTypes.Map:
-            case ItemTypes.Invitation:
             case ItemTypes.SkillGem:
-            case ItemTypes.ClusterJewel:
-            case ItemTypes.Memory:
-            case ItemTypes.Beast:
                 if (priceInDivines >= 0.1)
                 {
                     AddText($"\nDivine: {priceInDivinesText}d");
                 }
 
-                AddText($"\nChaos: {minPriceText}c");
+                AddText($"\nExalt: {minPriceText}ex");
                 break;
         }
 
@@ -385,7 +371,6 @@ public partial class NinjaPricer
             AddText($"\nUniqueName: {HoveredItem.UniqueName}"
                     + $"\nBaseName: {HoveredItem.BaseName}"
                     + $"\nItemType: {HoveredItem.ItemType}"
-                    + $"\nMapType: {HoveredItem.MapInfo.MapType}"
                     + $"\nDetailsId: {HoveredItem.PriceData.DetailsId}");
         } 
                 
@@ -394,7 +379,7 @@ public partial class NinjaPricer
             if (TryGetArtifactPrice(HoveredItem, out var amount, out var artifactName))
             {
                 AddSection();
-                AddText($"\nArtifact price: ({(priceInChaos / amount * 100).FormatNumber(2)}c per 100 {artifactName})");
+                AddText($"\nArtifact price: ({(priceInChaos / amount * 100).FormatNumber(2)}ex per 100 {artifactName})");
             }
         }
 
@@ -435,7 +420,6 @@ public partial class NinjaPricer
                         CurrencyInfo = { StackSize = group.Sum(i => i.CurrencyInfo.StackSize) },
                         BaseName = group.Key.ItemType switch
                         {
-                            ItemTypes.Beast => group.Key.CapturedMonsterName,
                             _ => string.IsNullOrWhiteSpace(group.Key.UniqueName) ? group.Key.BaseName : group.Key.UniqueName,
                         },
                     })
@@ -461,8 +445,8 @@ public partial class NinjaPricer
     private void DrawWorthWidget(double chaosValue, Vector2 pos, int significantDigits, Color textColor, bool drawBackground, List<CustomItem> topValueItems) => DrawWorthWidget("", false, chaosValue, pos, significantDigits, textColor, drawBackground, topValueItems);
     private void DrawWorthWidget(string initialString, bool indent, double chaosValue, Vector2 pos, int significantDigits, Color textColor, bool drawBackground, List<CustomItem> topValueItems)
     {
-        var text = $"{initialString}{(indent ? "\t" : "")}Chaos: {chaosValue.FormatNumber(significantDigits)}" + (DivineDalue != null
-            ? $"\n{(indent ? "\t" : "")}Divine: {(chaosValue / DivineDalue.Value).FormatNumber(significantDigits)}"
+        var text = $"{initialString}{(indent ? "\t" : "")}Exalt: {chaosValue.FormatNumber(significantDigits)}" + (DivinePrice != null
+            ? $"\n{(indent ? "\t" : "")}Divine: {(chaosValue / DivinePrice).FormatNumber(significantDigits)}"
             : "");
         if (topValueItems.Count > 0)
         {
