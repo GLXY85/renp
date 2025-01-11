@@ -62,7 +62,7 @@ public class DataDownloader
 
                 log("Finished Gathering Data from Poe.Ninja.");
                 CollectedData = newData;
-                DivineValue = CollectedData.Currency.Find(x => x.type == "Divine Orb")?.latest_price?.price;
+                DivineValue = CollectedData.Currency.Find(x => x.type == "Divine Orb")?.latest_price?.nominal_price;
                 log("Updated CollectedData.");
             }
             finally
