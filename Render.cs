@@ -325,7 +325,7 @@ public partial class NinjaPricer
                         ? $"\nDivine: {priceInDivinesText}d ({priceInDivinessPerOne.FormatNumber(2)}d per one)"
                         : $"\nDivine: {priceInDivinesText}d");
                 }
-                AddText($"\nChaos: {minPriceText}ex ({(priceInChaos / HoveredItem.CurrencyInfo.StackSize).FormatNumber(2, Settings.VisualPriceSettings.MaximalValueForFractionalDisplay)}ex per one)");
+                AddText($"\nExalt: {minPriceText}ex ({(priceInChaos / HoveredItem.CurrencyInfo.StackSize).FormatNumber(2, Settings.VisualPriceSettings.MaximalValueForFractionalDisplay)}ex per one)");
                 break;
             case ItemTypes.UniqueAccessory:
             case ItemTypes.UniqueArmour:

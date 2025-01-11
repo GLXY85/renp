@@ -122,7 +122,7 @@ public partial class NinjaPricer
                         var shardCurrencySearch = CollectedData.Currency.Find(x=>x.type==pricedItem);
                         if (shardCurrencySearch != null)
                         {
-                            item.PriceData.MinChaosValue = item.CurrencyInfo.StackSize * shardCurrencySearch.latest_price.price / pricedStack;
+                            item.PriceData.MinChaosValue = item.CurrencyInfo.StackSize * shardCurrencySearch.latest_price.nominal_price / pricedStack;
                             item.PriceData.ChangeInLast7Days = 0;
                             item.PriceData.DetailsId = shardCurrencySearch.id;
                         }
@@ -133,7 +133,7 @@ public partial class NinjaPricer
                         var catalystSearch = CollectedData.Breach.Find(x=>x.type==item.BaseName);
                         if (catalystSearch != null)
                         {
-                            item.PriceData.MinChaosValue = item.CurrencyInfo.StackSize * catalystSearch.latest_price.price;
+                            item.PriceData.MinChaosValue = item.CurrencyInfo.StackSize * catalystSearch.latest_price.nominal_price;
                             item.PriceData.ChangeInLast7Days = 0;
                             item.PriceData.DetailsId = catalystSearch.id;
                         }
@@ -143,7 +143,7 @@ public partial class NinjaPricer
                         var distilledSearch = CollectedData.Delirium.Find(x => x.type == item.BaseName);
                         if (distilledSearch != null)
                         {
-                            item.PriceData.MinChaosValue = item.CurrencyInfo.StackSize * distilledSearch.latest_price.price;
+                            item.PriceData.MinChaosValue = item.CurrencyInfo.StackSize * distilledSearch.latest_price.nominal_price;
                             item.PriceData.ChangeInLast7Days = 0;
                             item.PriceData.DetailsId = distilledSearch.id;
                         }
@@ -163,7 +163,7 @@ public partial class NinjaPricer
                         var essenceSearch = CollectedData.Essences.Find(x => x.type == item.BaseName);
                         if (essenceSearch != null)
                         {
-                            item.PriceData.MinChaosValue = item.CurrencyInfo.StackSize * essenceSearch.latest_price.price;
+                            item.PriceData.MinChaosValue = item.CurrencyInfo.StackSize * essenceSearch.latest_price.nominal_price;
                             item.PriceData.ChangeInLast7Days = 0;
                             item.PriceData.DetailsId = essenceSearch.id;
                         }
@@ -173,7 +173,7 @@ public partial class NinjaPricer
                         var omenSearch = CollectedData.Ritual.Find(x => x.type == item.BaseName);
                         if (omenSearch != null)
                         {
-                            item.PriceData.MinChaosValue = item.CurrencyInfo.StackSize * omenSearch.latest_price.price;
+                            item.PriceData.MinChaosValue = item.CurrencyInfo.StackSize * omenSearch.latest_price.nominal_price;
                             item.PriceData.ChangeInLast7Days = 0;
                             item.PriceData.DetailsId = omenSearch.id;
                         }
@@ -232,14 +232,14 @@ public partial class NinjaPricer
                             (x.name == item.UniqueName || item.UniqueNameCandidates.Contains(x.name)));
                         if (uniqueAccessorySearch.Count == 1)
                         {
-                            item.PriceData.MinChaosValue = uniqueAccessorySearch[0].latest_price.price;
+                            item.PriceData.MinChaosValue = uniqueAccessorySearch[0].latest_price.nominal_price;
                             item.PriceData.ChangeInLast7Days = 0;
                             item.PriceData.DetailsId = uniqueAccessorySearch[0].id;
                         }
                         else if (uniqueAccessorySearch.Count > 1)
                         {
-                            item.PriceData.MinChaosValue = uniqueAccessorySearch.Min(x => x.latest_price.price);
-                            item.PriceData.MaxChaosValue = uniqueAccessorySearch.Max(x => x.latest_price.price);
+                            item.PriceData.MinChaosValue = uniqueAccessorySearch.Min(x => x.latest_price.nominal_price);
+                            item.PriceData.MaxChaosValue = uniqueAccessorySearch.Max(x => x.latest_price.nominal_price);
                             item.PriceData.ChangeInLast7Days = 0;
                             item.PriceData.DetailsId = uniqueAccessorySearch[0].id;
                         }
@@ -258,14 +258,14 @@ public partial class NinjaPricer
 
                         if (uniqueArmourSearchLinks.Count == 1)
                         {
-                            item.PriceData.MinChaosValue = uniqueArmourSearchLinks[0].latest_price.price;
+                            item.PriceData.MinChaosValue = uniqueArmourSearchLinks[0].latest_price.nominal_price;
                             item.PriceData.ChangeInLast7Days = 0;
                             item.PriceData.DetailsId = uniqueArmourSearchLinks[0].id;
                         }
                         else if (uniqueArmourSearchLinks.Count > 1)
                         {
-                            item.PriceData.MinChaosValue = uniqueArmourSearchLinks.Min(x => x.latest_price.price);
-                            item.PriceData.MaxChaosValue = uniqueArmourSearchLinks.Max(x => x.latest_price.price);
+                            item.PriceData.MinChaosValue = uniqueArmourSearchLinks.Min(x => x.latest_price.nominal_price);
+                            item.PriceData.MaxChaosValue = uniqueArmourSearchLinks.Max(x => x.latest_price.nominal_price);
                             item.PriceData.ChangeInLast7Days = 0;
                             item.PriceData.DetailsId = uniqueArmourSearchLinks[0].id;
                         }
@@ -332,14 +332,14 @@ public partial class NinjaPricer
                             .ToList();
                         if (uniqueArmourSearchLinks.Count == 1)
                         {
-                            item.PriceData.MinChaosValue = uniqueArmourSearchLinks[0].latest_price.price;
+                            item.PriceData.MinChaosValue = uniqueArmourSearchLinks[0].latest_price.nominal_price;
                             item.PriceData.ChangeInLast7Days = 0;
                             item.PriceData.DetailsId = uniqueArmourSearchLinks[0].id;
                         }
                         else if (uniqueArmourSearchLinks.Count > 1)
                         {
-                            item.PriceData.MinChaosValue = uniqueArmourSearchLinks.Min(x => x.latest_price.price);
-                            item.PriceData.MaxChaosValue = uniqueArmourSearchLinks.Max(x => x.latest_price.price);
+                            item.PriceData.MinChaosValue = uniqueArmourSearchLinks.Min(x => x.latest_price.nominal_price);
+                            item.PriceData.MaxChaosValue = uniqueArmourSearchLinks.Max(x => x.latest_price.nominal_price);
                             item.PriceData.ChangeInLast7Days = 0;
                             item.PriceData.DetailsId = uniqueArmourSearchLinks[0].id;
                         }
@@ -390,7 +390,7 @@ public partial class NinjaPricer
                     {
                         foreach (var result in uniqueArmourSearch)
                         {
-                            item.PriceData.ItemBasePrices.Add((double)result.latest_price.price);
+                            item.PriceData.ItemBasePrices.Add((double)result.latest_price.nominal_price);
                         }
                     }
                     break;
@@ -400,7 +400,7 @@ public partial class NinjaPricer
                     {
                         foreach (var result in uniqueWeaponSearch)
                         {
-                            item.PriceData.ItemBasePrices.Add((double)result.latest_price.price);
+                            item.PriceData.ItemBasePrices.Add((double)result.latest_price.nominal_price);
                         }
                     }
                     break;
@@ -410,7 +410,7 @@ public partial class NinjaPricer
                     {
                         foreach (var result in uniqueAccessorySearch)
                         {
-                            item.PriceData.ItemBasePrices.Add((double)result.latest_price.price);
+                            item.PriceData.ItemBasePrices.Add((double)result.latest_price.nominal_price);
                         }
                     }
                     break;
