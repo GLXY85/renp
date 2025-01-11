@@ -42,6 +42,7 @@ public partial class NinjaPricer
         { "Splinter of Uul-Netol", "Uul-Netol's Breachstone" },
         { "Splinter of Chayula", "Chayula's Breachstone" },
         { "Simulacrum Splinter", "Simulacrum" },
+        { "Chance Shard", "Orb of Chance" },
     };
 
     private double DivinePrice => _downloader.DivineValue ?? 0;
