@@ -48,12 +48,11 @@ public class DataSourceSettings
     [JsonIgnore]
     public ButtonNode ReloadPrices { get; set; } = new();
 
-    public ToggleNode AutoReload { get; set; } = new();
+    [JsonProperty("AutoReload_v2")]
+    public ToggleNode AutoReload { get; set; } = new(true);
 
     [Menu(null, "Minutes")]
     public RangeNode<int> ReloadPeriod { get; set; } = new(15, 1, 60);
-
-    public ToggleNode CheckMapVariant { get; set; } = new(false);
 }
 
 [Submenu(CollapsedByDefault = true)]
