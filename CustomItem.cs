@@ -8,13 +8,13 @@ using ExileCore2.PoEMemory.FilesInMemory;
 using ExileCore2.PoEMemory.MemoryObjects;
 using ExileCore2.PoEMemory.Models;
 using ExileCore2.Shared.Enums;
-using NinjaPricer.Enums;
+using RENP.Enums;
 
-namespace NinjaPricer;
+namespace RENP;
 
 public class CustomItem
 {
-    public static NinjaPricer Core;
+    public static RENP Core;
     public string BaseName;
     public string UniqueName;
     public readonly string ClassName;
@@ -38,9 +38,9 @@ public class CustomItem
 
     public MapData MapInfo { get; set; } =  new MapData();
     public CurrencyData CurrencyInfo { get; set; } =  new CurrencyData();
-    public NinjaPricer.RelevantPriceData PriceData { get; set; } = new NinjaPricer.RelevantPriceData();
+    public RENP.RelevantPriceData PriceData { get; set; } = new RENP.RelevantPriceData();
 
-    public static void InitCustomItem(NinjaPricer core)
+    public static void InitCustomItem(RENP core)
     {
         Core = core;
     }

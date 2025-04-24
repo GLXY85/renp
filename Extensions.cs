@@ -1,7 +1,6 @@
 using System;
-using NinjaPricer.API.PoeNinja;
 
-namespace NinjaPricer;
+namespace RENP;
 
 public static class Extensions
 {

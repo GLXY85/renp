@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using NinjaPricer.API.Poe2Scout.Models;
+using RENP.API.Poe2Scout.Models;
 
-namespace NinjaPricer.API.Poe2Scout;
+namespace RENP.API.Poe2Scout;
 
 public class CollectiveApiData
 {

@@ -1,4 +1,4 @@
-namespace NinjaPricer.API.PoeNinja;
+namespace RENP.API.PoeNinja;
 
 public class CollectiveApiData
 {

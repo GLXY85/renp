@@ -1,16 +1,31 @@
-# NinjaPricer
-ExileCore2 Plugin for instant price checking. Originally made by https://github.com/DetectiveSquirrel/
+# RE:NP (Reworked NinjaPricer)
 
-What does it do?
-This plugin downloads public price data.
-The data can then be used to price check items such as:
-- Currency
-- Divination Cards
-- Essences
-- Fragments
-- Uniques
+Форк [NinjaPricer](https://github.com/exCore2/NinjaPricer), обновленный для последних патчей Path of Exile.
 
-The plugin can also show the overall worth of a stash tab or inventory.
+## Что делает плагин?
 
-Item that aren't available in the data show 0c as price.
-Item that have multiple variants show a range between the lowest and highest cost. The plugin can't differentiate between them.
+Этот плагин загружает данные о ценах с poe.ninja. Данные могут быть использованы для проверки цен на:
+
+* Валюту
+* Карты гадальщика
+* Эссенции
+* Фрагменты
+* Уникальные предметы
+
+Плагин также может показывать общую стоимость вкладки сундука или инвентаря.
+
+## Изменения в RE:NP
+
+* Переименован для избежания конфликтов с оригинальным NinjaPricer
+* Обновлен для поддержки последних патчей игры
+* Улучшения производительности и стабильности
+
+## Установка
+
+1. Скачайте последнюю версию [ExileCore2](https://github.com/EXAMPLE/ExileCore2) (требуется для работы)
+2. Скачайте RE:NP и распакуйте в директорию с плагинами ExileCore2
+3. Запустите ExileCore2 и активируйте плагин
+
+## О проекте
+
+RE:NP является форком NinjaPricer, изначально созданного [DetectiveSquirrel](https://github.com/DetectiveSquirrel/).

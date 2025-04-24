@@ -3,11 +3,11 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using NinjaPricer.API.PoeNinja;
+using RENP.API.PoeNinja;
 
-namespace NinjaPricer;
+namespace RENP;
 
-public partial class NinjaPricer
+public partial class RENP
 {
     private const string CurrencyUrl = "https://poe.ninja/api/data/currencyoverview?league={0}&type=Currency&language=en";
     private const string FragmentsUrl = "https://poe.ninja/api/data/currencyoverview?league={0}&type=Fragment&language=en";

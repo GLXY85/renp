@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
-namespace NinjaPricer.API.PoeNinja;
+namespace RENP.API.PoeNinja;
 
 public class SkillGems
 {

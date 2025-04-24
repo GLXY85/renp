@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace NinjaPricer.API.Poe2Scout.Models;
+namespace RENP.API.Poe2Scout.Models;
 
 public class Ultimatum
 {

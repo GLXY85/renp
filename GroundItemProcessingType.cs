@@ -1,4 +1,4 @@
-namespace NinjaPricer;
+namespace RENP;
 
 public enum GroundItemProcessingType
 {

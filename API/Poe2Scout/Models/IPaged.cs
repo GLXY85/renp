@@ -1,4 +1,4 @@
-﻿namespace NinjaPricer.API.Poe2Scout.Models;
+namespace RENP.API.Poe2Scout.Models;
 
 public interface IPaged<T>
 {

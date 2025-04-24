@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
-namespace NinjaPricer.API.PoeNinja;
+namespace RENP.API.PoeNinja;
 
 public class Scarab
 {

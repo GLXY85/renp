@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace NinjaPricer.API.PoeNinja;
+namespace RENP.API.PoeNinja;
 
 public class Fossils
 {

@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace NinjaPricer;
+namespace RENP;
 
 public static class Utils
 {

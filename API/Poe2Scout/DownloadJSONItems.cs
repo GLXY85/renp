@@ -4,9 +4,9 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using NinjaPricer.API.Poe2Scout.Models;
+using RENP.API.Poe2Scout.Models;
 
-namespace NinjaPricer.API.Poe2Scout;
+namespace RENP.API.Poe2Scout;
 
 public class DataDownloader
 {
@@ -20,7 +20,7 @@ public class DataDownloader
     }
 
     public Action<string> log { get; set; }
-    public NinjaPricerSettings Settings { get; set; }
+    public RENPSettings Settings { get; set; }
     public string DataDirectory { get; set; }
 
     public void StartDataReload(string league, bool forceRefresh)

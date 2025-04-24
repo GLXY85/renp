@@ -1,4 +1,4 @@
-﻿namespace NinjaPricer.Enums;
+﻿namespace RENP.Enums;
 
 public enum MapTypes
 {

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using NinjaPricer.Enums;
+using RENP.Enums;
 
-namespace NinjaPricer;
+namespace RENP;
 
-public partial class NinjaPricer
+public partial class RENP
 {
     public class RelevantPriceData // store data that was got from checking the item against the poe.ninja data
     {

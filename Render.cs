@@ -13,13 +13,13 @@ using ExileCore2.Shared.Cache;
 using ExileCore2.Shared.Enums;
 using ExileCore2.Shared.Helpers;
 using ImGuiNET;
-using NinjaPricer.Enums;
-using static NinjaPricer.Enums.HaggleTypes.HaggleType;
+using RENP.Enums;
+using static RENP.Enums.HaggleTypes.HaggleType;
 using RectangleF = ExileCore2.Shared.RectangleF;
 
-namespace NinjaPricer;
+namespace RENP;
 
-public partial class NinjaPricer
+public partial class RENP
 {
     public readonly Stopwatch StashUpdateTimer = Stopwatch.StartNew();
     public readonly Stopwatch InventoryUpdateTimer = Stopwatch.StartNew();
@@ -42,7 +42,7 @@ public partial class NinjaPricer
     private readonly CachedValue<List<ItemOnGround>> _slowGroundItems;
     private readonly CachedValue<List<ItemOnGround>> _groundItems;
 
-    public NinjaPricer()
+    public RENP()
     {
         _slowGroundItems = new TimeCache<List<ItemOnGround>>(GetItemsOnGroundSlow, 500);
         _groundItems = new FrameCache<List<ItemOnGround>>(CacheUtils.RememberLastValue(GetItemsOnGround, new List<ItemOnGround>()));
