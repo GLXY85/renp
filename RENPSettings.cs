@@ -22,6 +22,23 @@ public class RENPSettings : ISettings
     public LeagueSpecificSettings LeagueSpecificSettings { get; set; } = new();
     public VisualPriceSettings VisualPriceSettings { get; set; } = new();
     public ToggleNode Enable { get; set; } = new(true);
+    public TextNode League { get; set; } = new TextNode("Standard");
+    public ToggleNode AutoUpdateLeague { get; set; } = new ToggleNode(true);
+    public ToggleNode ShowOverlay { get; set; } = new ToggleNode(true);
+    public RangeNode<int> UpdateInterval { get; set; } = new RangeNode<int>(60, 10, 1440);
+    public RangeNode<int> ItemsToShow { get; set; } = new RangeNode<int>(10, 5, 30);
+    public RangeNode<int> BackgroundAlpha { get; set; } = new RangeNode<int>(200, 0, 255);
+    public ColorNode BackgroundColor { get; set; } = new ColorNode(Color.Black);
+    public ColorNode TextColor { get; set; } = new ColorNode(Color.White);
+    public ColorNode HighValueColor { get; set; } = new ColorNode(Color.Green);
+    public RangeNode<int> FontSize { get; set; } = new RangeNode<int>(16, 10, 24);
+    public HotkeyNode ToggleOverlayKey { get; set; } = new HotkeyNode(Keys.F9);
+    public HotkeyNode ForceUpdateKey { get; set; } = new HotkeyNode(Keys.F10);
+    public RangeNode<int> HighValueThreshold { get; set; } = new RangeNode<int>(50, 1, 1000);
+    public ToggleNode ShowCurrency { get; set; } = new ToggleNode(true);
+    public ToggleNode ShowFragments { get; set; } = new ToggleNode(true);
+    public ToggleNode ShowRunes { get; set; } = new ToggleNode(true);
+    public ToggleNode ShowUniqueItems { get; set; } = new ToggleNode(true);
 }
 
 [Submenu(CollapsedByDefault = true)]
