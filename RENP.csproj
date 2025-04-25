@@ -18,19 +18,19 @@
   <ItemGroup>
     <Reference Include="ExileCore2">
       <HintPath>libs\ExileCore2.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="ImGui.NET">
       <HintPath>libs\ImGui.NET.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="SharpDX">
       <HintPath>libs\SharpDX.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="SharpDX.Mathematics">
       <HintPath>libs\SharpDX.Mathematics.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -48,4 +48,8 @@
     <EmbeddedResource Remove="ApiTest\**" />
     <None Remove="ApiTest\**" />
   </ItemGroup>
+  
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy &quot;$(ProjectDir)libs\*.dll&quot; &quot;C:\Users\GLXY\Desktop\ExileCore2-15\Plugins\Source\renp\&quot; /Y" />
+  </Target>
 </Project> 
