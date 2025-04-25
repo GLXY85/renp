@@ -6,6 +6,7 @@ using System.Reflection;
 using ExileCore2;
 using ExileCore2.PoEMemory.MemoryObjects;
 using ExileCore2.PoEMemory.Models;
+using ExileCore2.Shared.Nodes;
 using Newtonsoft.Json;
 using RENP.API.Poe2Scout;
 using RENP.API.Poe2Scout.Models;
@@ -349,7 +350,7 @@ public partial class RENP : BaseSettingsPlugin<RENPSettings>
         }
     }
 
-    public override Job Tick()
+    public override void Tick()
     {
         // Обрабатываем горячие клавиши
         if (Settings.ToggleOverlayKey.PressedOnce())
@@ -367,11 +368,9 @@ public partial class RENP : BaseSettingsPlugin<RENPSettings>
         {
             Task.Run(async () => await UpdatePriceData());
         }
-        
-        return null;
     }
 
-    public override void Render()
+    public void RenderOverlay()
     {
         if (!Settings.Enable || !overlayVisible || !Settings.ShowOverlay)
             return;
@@ -651,7 +650,7 @@ public partial class RENP : BaseSettingsPlugin<RENPSettings>
             LogMessage(message, 5, Color.White);
     }
 
-    private void LogError(string message)
+    private new void LogError(string message)
     {
         LogMessage(message, 5, Color.Red);
     }

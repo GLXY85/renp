@@ -26,7 +26,19 @@ public static class Extensions
             return $"1/{Math.Round((decimal)(1 / number), 1):#.#}";
         }
 
-        return Math.Round((decimal)number, significantDigits).ToString($"#,##0.{new string(forceDecimals ? '0' : '#', significantDigits)}");
+        if (double.IsInfinity(number) || number > (double)decimal.MaxValue || number < (double)decimal.MinValue)
+        {
+            return number > 0 ? "Inf" : "-Inf";
+        }
+
+        try
+        {
+            return Math.Round((decimal)number, significantDigits).ToString($"#,##0.{new string(forceDecimals ? '0' : '#', significantDigits)}");
+        }
+        catch (OverflowException)
+        {
+            return number > 0 ? "Inf" : "-Inf";
+        }
     }
 
     public static bool IsChanceable(this object item)

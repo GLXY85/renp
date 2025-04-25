@@ -8,6 +8,7 @@
     <DebugType>embedded</DebugType>
     <PathMap>$(MSBuildProjectDirectory)=$(MSBuildProjectName)</PathMap>
     <EmbedAllSources>true</EmbedAllSources>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="uniqueArtMapping.default.json" LogicalName="uniqueArtMapping.default.json">
@@ -41,5 +42,10 @@
     <None Update="libs\cimgui.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="ApiTest\**" />
+    <EmbeddedResource Remove="ApiTest\**" />
+    <None Remove="ApiTest\**" />
   </ItemGroup>
 </Project> 

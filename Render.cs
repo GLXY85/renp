@@ -125,6 +125,21 @@ public partial class RENP
 
         try // Im lazy and just want to surpress all errors produced
         {
+            // Отладочное логирование значения DivinePrice
+            if (Settings.DebugSettings.EnableDebugLogging) 
+            {
+                LogMessage($"DEBUG: DivinePrice value = {DivinePrice}", 5, Color.Cyan);
+                
+                // Проверка типа данных и источника
+                var divineValueType = DivinePrice.HasValue ? DivinePrice.Value.GetType().Name : "null";
+                LogMessage($"DEBUG: DivinePrice type = {divineValueType}", 5, Color.Cyan);
+                
+                // Проверка данных в CollectedData
+                var divineOrb = CollectedData?.Currency?.Find(x => x?.type == "Divine Orb");
+                var price = divineOrb?.latest_price?.nominal_price;
+                LogMessage($"DEBUG: Divine Orb in CollectedData: {divineOrb != null}, price: {price}", 5, Color.Cyan);
+            }
+            
             // only update if the time between last update is more than AutoReloadTimer interval
             if (Settings.DataSourceSettings.AutoReload && Settings.DataSourceSettings.LastUpdateTime.AddMinutes(Settings.DataSourceSettings.ReloadPeriod.Value) < DateTime.Now)
             {
@@ -401,6 +416,9 @@ public partial class RENP
 
             ImGui.EndTooltip();
         }
+
+        // Вызываем RenderOverlay после обработки наведенного предмета
+        RenderOverlay();
     }
 
     private void VisibleStashValue()
@@ -445,9 +463,27 @@ public partial class RENP
     private void DrawWorthWidget(double chaosValue, Vector2 pos, int significantDigits, Color textColor, bool drawBackground, List<CustomItem> topValueItems) => DrawWorthWidget("", false, chaosValue, pos, significantDigits, textColor, drawBackground, topValueItems);
     private void DrawWorthWidget(string initialString, bool indent, double chaosValue, Vector2 pos, int significantDigits, Color textColor, bool drawBackground, List<CustomItem> topValueItems)
     {
-        var text = $"{initialString}{(indent ? "\t" : "")}Exalt: {chaosValue.FormatNumber(significantDigits)}" + (DivinePrice != null
-            ? $"\n{(indent ? "\t" : "")}Divine: {(chaosValue / DivinePrice).FormatNumber(significantDigits)}"
-            : "");
+        string divineValueText = "";
+        
+        // Безопасно вычисляем стоимость в Divine Orb
+        if (DivinePrice.HasValue && DivinePrice.Value > 0)
+        {
+            try
+            {
+                divineValueText = $"\n{(indent ? "\t" : "")}Divine: {(chaosValue / DivinePrice.Value).FormatNumber(significantDigits)}";
+            }
+            catch (Exception)
+            {
+                divineValueText = $"\n{(indent ? "\t" : "")}Divine: Error";
+                if (Settings.DebugSettings.EnableDebugLogging)
+                {
+                    LogMessage("Error calculating Divine price value", 5, Color.Orange);
+                }
+            }
+        }
+        
+        var text = $"{initialString}{(indent ? "\t" : "")}Exalt: {chaosValue.FormatNumber(significantDigits)}{divineValueText}";
+        
         if (topValueItems.Count > 0)
         {
             var maxChaosValueLength = topValueItems.Max(x => x.PriceData.MinChaosValue.FormatNumber(2, forceDecimals: true).Length);
