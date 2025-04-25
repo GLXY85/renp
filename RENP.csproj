@@ -19,18 +19,22 @@
     <Reference Include="ExileCore2">
       <HintPath>libs\ExileCore2.dll</HintPath>
       <Private>True</Private>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Reference>
     <Reference Include="ImGui.NET">
       <HintPath>libs\ImGui.NET.dll</HintPath>
       <Private>True</Private>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Reference>
     <Reference Include="SharpDX">
       <HintPath>libs\SharpDX.dll</HintPath>
       <Private>True</Private>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Reference>
     <Reference Include="SharpDX.Mathematics">
       <HintPath>libs\SharpDX.Mathematics.dll</HintPath>
       <Private>True</Private>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -42,6 +46,18 @@
     <None Update="libs\cimgui.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="libs\ExileCore2.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="libs\ImGui.NET.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="libs\SharpDX.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="libs\SharpDX.Mathematics.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="ApiTest\**" />
@@ -51,5 +67,9 @@
   
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="xcopy &quot;$(ProjectDir)libs\*.dll&quot; &quot;C:\Users\GLXY\Desktop\ExileCore2-15\Plugins\Source\renp\&quot; /Y" />
+  </Target>
+  
+  <Target Name="PostBuild2" AfterTargets="PostBuildEvent">
+    <Exec Command="copy &quot;$(ProjectDir)libs\ExileCore2.dll&quot; &quot;C:\Users\GLXY\Desktop\ExileCore2-15\Plugins\Source\renp\ExileCore2.dll&quot; /y&#xD;&#xA;copy &quot;$(ProjectDir)libs\ImGui.NET.dll&quot; &quot;C:\Users\GLXY\Desktop\ExileCore2-15\Plugins\Source\renp\ImGui.NET.dll&quot; /y&#xD;&#xA;copy &quot;$(ProjectDir)libs\SharpDX.dll&quot; &quot;C:\Users\GLXY\Desktop\ExileCore2-15\Plugins\Source\renp\SharpDX.dll&quot; /y&#xD;&#xA;copy &quot;$(ProjectDir)libs\SharpDX.Mathematics.dll&quot; &quot;C:\Users\GLXY\Desktop\ExileCore2-15\Plugins\Source\renp\SharpDX.Mathematics.dll&quot; /y&#xD;&#xA;copy &quot;$(ProjectDir)libs\cimgui.dll&quot; &quot;C:\Users\GLXY\Desktop\ExileCore2-15\Plugins\Source\renp\cimgui.dll&quot; /y&#xD;&#xA;copy &quot;$(ProjectDir)libs\ExileCore2.dll&quot; &quot;C:\Users\GLXY\Desktop\ExileCore2-15\Plugins\Source\renp\bin\Debug\ExileCore2.dll&quot; /y&#xD;&#xA;copy &quot;$(ProjectDir)libs\ImGui.NET.dll&quot; &quot;C:\Users\GLXY\Desktop\ExileCore2-15\Plugins\Source\renp\bin\Debug\ImGui.NET.dll&quot; /y&#xD;&#xA;copy &quot;$(ProjectDir)libs\SharpDX.dll&quot; &quot;C:\Users\GLXY\Desktop\ExileCore2-15\Plugins\Source\renp\bin\Debug\SharpDX.dll&quot; /y&#xD;&#xA;copy &quot;$(ProjectDir)libs\SharpDX.Mathematics.dll&quot; &quot;C:\Users\GLXY\Desktop\ExileCore2-15\Plugins\Source\renp\bin\Debug\SharpDX.Mathematics.dll&quot; /y&#xD;&#xA;copy &quot;$(ProjectDir)libs\cimgui.dll&quot; &quot;C:\Users\GLXY\Desktop\ExileCore2-15\Plugins\Source\renp\bin\Debug\cimgui.dll&quot; /y&#xD;&#xA;copy &quot;$(ProjectDir)libs\ExileCore2.dll&quot; &quot;C:\Users\GLXY\Desktop\ExileCore2-15\Plugins\Source\renp\bin\Release\ExileCore2.dll&quot; /y&#xD;&#xA;copy &quot;$(ProjectDir)libs\ImGui.NET.dll&quot; &quot;C:\Users\GLXY\Desktop\ExileCore2-15\Plugins\Source\renp\bin\Release\ImGui.NET.dll&quot; /y&#xD;&#xA;copy &quot;$(ProjectDir)libs\SharpDX.dll&quot; &quot;C:\Users\GLXY\Desktop\ExileCore2-15\Plugins\Source\renp\bin\Release\SharpDX.dll&quot; /y&#xD;&#xA;copy &quot;$(ProjectDir)libs\SharpDX.Mathematics.dll&quot; &quot;C:\Users\GLXY\Desktop\ExileCore2-15\Plugins\Source\renp\bin\Release\SharpDX.Mathematics.dll&quot; /y&#xD;&#xA;copy &quot;$(ProjectDir)libs\cimgui.dll&quot; &quot;C:\Users\GLXY\Desktop\ExileCore2-15\Plugins\Source\renp\bin\Release\cimgui.dll&quot; /y" />
   </Target>
 </Project> 
